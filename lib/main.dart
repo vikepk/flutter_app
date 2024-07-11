@@ -39,13 +39,24 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () => context.push('/repos'),
-              child: const Text('GitHub Repo'),
+            Container(
+              height: 40,
+              color: Colors.yellow,
+              child: TextButton(
+                onPressed: () => context.push('/repos'),
+                child: const Text('GitHub Repo'),
+              ),
             ),
-            TextButton(
-                onPressed: () => context.push('/task'),
-                child: const Text('UI Design')),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 40,
+              color: Colors.orange,
+              child: TextButton(
+                  onPressed: () => context.push('/task'),
+                  child: const Text('UI Design')),
+            ),
           ],
         ),
       ),
