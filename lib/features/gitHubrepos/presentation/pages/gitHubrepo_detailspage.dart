@@ -74,7 +74,7 @@ class GitHubRepoDetailPage extends StatelessWidget {
                 style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 16),
-              _buildInfoRow(Icons.star, 'Stars: ${repo.stars}'),
+              _buildInfoRow(Icons.star, 'Stars Gazers: ${repo.stars}'),
               _buildInfoRow(
                   Icons.visibility, 'Watchers: ${repo.watchersCount}'),
               _buildInfoRow(Icons.lock_open, 'Visibility: ${repo.visibility}'),
