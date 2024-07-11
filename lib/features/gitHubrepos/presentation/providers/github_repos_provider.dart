@@ -8,6 +8,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final currentPageProvider = StateProvider<int>((ref) => 1);
+//Pagination page Provider
 
 class GitHubRepo extends AsyncNotifier<List<GitHubRepoEntity>> {
   bool isLoading = false;
@@ -17,18 +18,24 @@ class GitHubRepo extends AsyncNotifier<List<GitHubRepoEntity>> {
     return [];
   }
 
-  Future<void> getGitHubRepos({required bool first}) async {
+  Future<void> getGitHubRepos(
+      {required bool first, required int daysAgo}) async {
     if (isLoading) return;
+    //first used to reset when user changes to past 30 days
     isLoading = true;
+    first ? state = const AsyncValue.data([]) : null;
     first ? state = const AsyncLoading() : null;
+    first ? ref.read(currentPageProvider.notifier).state = 1 : null;
+
     try {
       final respository = ref.read(gitHubrespository);
       final currentpage = ref.read(currentPageProvider.notifier).state;
 
       final results = await GetRepos(gitHubRepoRepository: respository)
-          .getRepos(page: currentpage);
-      // state = AsyncValue.data([...?state.value, ...repos]);
+          .getRepos(page: currentpage, daysAgo: daysAgo);
+      //calling UseCase GetRepos through which calling the respository function
       state = results.fold(
+          //it returns either failure or data according to it state is changed
           (failure) => AsyncValue.error(failure, StackTrace.current), (repos) {
         ref.read(currentPageProvider.notifier).state++;
         return AsyncValue.data([...state.value!, ...repos]);
@@ -37,13 +44,16 @@ class GitHubRepo extends AsyncNotifier<List<GitHubRepoEntity>> {
       state = AsyncValue.error(e, StackTrace.current);
     } finally {
       isLoading = false;
+      //after function exection making it false
     }
   }
 }
 
 final GitHubRepoProvider =
     AsyncNotifierProvider<GitHubRepo, List<GitHubRepoEntity>>(GitHubRepo.new);
+//AsyncNotifierprovider
 
+//GitHubRepo Impl
 final gitHubrespository = StateProvider((ref) {
   return GitHubRepoRepositoryImpl(
       dataSource: GitHubRepoRemoteDataSourceImpl(dbHelper: DatabaseHelper()),

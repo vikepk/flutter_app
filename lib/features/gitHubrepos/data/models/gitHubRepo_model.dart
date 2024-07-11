@@ -1,6 +1,7 @@
 import 'package:assignmenr/core/constants/constants.dart';
 import 'package:assignmenr/features/gitHubrepos/business/entities/gitHubRepo_entity.dart';
 
+//Model
 class GitHubRepoModel extends GitHubRepoEntity {
   GitHubRepoModel({
     int? id,

@@ -1,7 +1,7 @@
 import 'package:assignmenr/features/gitHubrepos/business/entities/gitHubRepo_entity.dart';
-import 'package:assignmenr/features/gitHubrepos/presentation/pages/gitHubrepo_detailspage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GithubRepoItem extends StatelessWidget {
   final GitHubRepoEntity repo;
@@ -12,12 +12,7 @@ class GithubRepoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GitHubRepoDetailPage(repo: repo),
-          ),
-        );
+        context.push('/repodetail', extra: {'repo': repo});
       },
       child: Card(
         color: const Color(0xFF272727),

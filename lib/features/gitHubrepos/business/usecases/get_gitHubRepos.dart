@@ -9,7 +9,7 @@ class GetRepos {
   GetRepos({required this.gitHubRepoRepository});
 
   Future<Either<Failure, List<GitHubRepoEntity>>> getRepos(
-      {required int page}) async {
-    return await gitHubRepoRepository.getRepos(page: page);
+      {required int page, required int daysAgo}) async {
+    return await gitHubRepoRepository.getRepos(page: page, daysAgo: daysAgo);
   }
 }

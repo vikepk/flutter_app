@@ -1,3 +1,5 @@
+//Entity
+
 class GitHubRepoEntity {
   final int? id;
   final String name;

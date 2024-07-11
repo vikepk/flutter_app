@@ -19,12 +19,13 @@ class GitHubRepoRepositoryImpl implements GitHubRepoRepository {
 
   @override
   Future<Either<Failure, List<GitHubRepoModel>>> getRepos(
-      {required int page}) async {
+      {required int page, required int daysAgo}) async {
     final connectivityResult = await connectivity.checkConnectivity();
     if (!(connectivityResult == ConnectivityResult.none)) {
+      //If internet connection available
       try {
         List<GitHubRepoModel> remoteGitHubRepos =
-            await dataSource.getGitHubRepos(page: page);
+            await dataSource.getGitHubRepos(page: page, daysAgo: daysAgo);
 
         return Right(remoteGitHubRepos);
       } on ServerException {
@@ -32,6 +33,7 @@ class GitHubRepoRepositoryImpl implements GitHubRepoRepository {
       }
     } else {
       try {
+        //If internet connection unavailable get the last added repos from sqflite db
         List<GitHubRepoModel> localGitHubRepos = await dbHelper.getRepos();
         return Right(localGitHubRepos);
       } on CacheException {

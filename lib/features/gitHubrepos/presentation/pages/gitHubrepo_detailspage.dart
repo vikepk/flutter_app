@@ -86,6 +86,7 @@ class GitHubRepoDetailPage extends StatelessWidget {
               const SizedBox(height: 16),
               _buildInfoRow(Icons.link, 'View on GitHub ',
                   isLink: true, url: repo.htmlUrl),
+              //urlLauncher
               const SizedBox(height: 16),
               _buildInfoRow(Icons.calendar_today,
                   'Created At: ${_formatDate(repo.createdAt)}'),

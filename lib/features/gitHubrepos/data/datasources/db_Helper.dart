@@ -10,12 +10,14 @@ class DatabaseHelper {
   static Database? _database;
 
   Future<Database> get database async {
+    //getting db if doesn't exists it creates one
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
 
   Future<Database> _initDatabase() async {
+    //creates db
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, 'github_repos.db');
 
@@ -27,6 +29,7 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    //creating a Table repos in github_repos.db Database
     await db.execute('''
       CREATE TABLE repos(
         id INTEGER PRIMARY KEY,
@@ -50,6 +53,7 @@ class DatabaseHelper {
 
   Future<void> insertRepo(GitHubRepoModel repo) async {
     final db = await database;
+    //Inserting into table repos
     await db.insert(
       'repos',
       repo.toMap(),
@@ -60,7 +64,7 @@ class DatabaseHelper {
   Future<List<GitHubRepoModel>> getRepos() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('repos');
-
+//get the repos from the table
     return List.generate(maps.length, (i) {
       return GitHubRepoModel.fromMap(maps[i]);
     });
@@ -68,6 +72,7 @@ class DatabaseHelper {
 
   Future<void> deleteAllRepos() async {
     final db = await database;
+    //delete all repos
     await db.delete('repos');
   }
 }

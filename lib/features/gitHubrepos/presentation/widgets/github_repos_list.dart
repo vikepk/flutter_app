@@ -1,18 +1,28 @@
 import 'package:assignmenr/features/gitHubrepos/presentation/providers/github_repos_provider.dart';
+import 'package:assignmenr/features/gitHubrepos/presentation/widgets/github_repo_item.dart';
+import 'package:assignmenr/utils/notifymessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
-import 'github_repo_item.dart';
 
 class GithubReposList extends ConsumerWidget {
   final ScrollController controller;
 
-  GithubReposList({required this.controller});
+  const GithubReposList({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reposAsyncValue = ref.watch(GitHubRepoProvider);
-
+    ref.listen<AsyncValue>(
+      GitHubRepoProvider,
+      (_, state) {
+        if (!state.isLoading && state.hasError) {
+          NotifyUserMessage.notifyType(
+              context, state.error.toString().replaceFirst('Exception:', ''));
+        }
+      },
+    );
+    //ref.listening When reposAsyncValue hasError it displays a Snackbar
     return reposAsyncValue.when(
       data: (repos) => ListView.builder(
         controller: controller,
@@ -28,6 +38,7 @@ class GithubReposList extends ConsumerWidget {
                   fontSize: 20),
             ));
           } else if (index == repos.length) {
+            //last element index to show user pagination loading
             return SizedBox(
                 height: 200,
                 child: Column(
@@ -43,13 +54,17 @@ class GithubReposList extends ConsumerWidget {
         },
       ),
       loading: () => ListView.builder(
+        //during loading
         physics: const NeverScrollableScrollPhysics(),
         itemCount: 10,
         itemBuilder: (context, index) {
           return _buildLoadingShimmer();
         },
       ),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+      error: (err, stack) => Center(
+          //Error contains message with text Exception so replacing it
+          child:
+              Text('Error: ${err.toString().replaceFirst('Exception:', '')}')),
     );
   }
 }

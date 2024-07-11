@@ -3,5 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../entities/gitHubRepo_entity.dart';
 
 abstract class GitHubRepoRepository {
-  Future<Either<Failure, List<GitHubRepoEntity>>> getRepos({required int page});
+  Future<Either<Failure, List<GitHubRepoEntity>>> getRepos(
+      {required int page, required int daysAgo});
 }
+//GitHubRepoRepository abstract class -->Definition

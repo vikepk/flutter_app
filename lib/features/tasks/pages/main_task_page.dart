@@ -1,14 +1,16 @@
 import 'package:assignmenr/features/tasks/widgets/task_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'task_detail_page.dart';
 
-class MainPage extends StatefulWidget {
+class MainTaskPage extends StatefulWidget {
+  const MainTaskPage({super.key});
+
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainTaskPageState createState() => _MainTaskPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainTaskPageState extends State<MainTaskPage> {
   int selectedDayIndex = 0;
   final List<DateTime> days = List.generate(30, (index) {
     final now = DateTime.now();
@@ -16,6 +18,9 @@ class _MainPageState extends State<MainPage> {
     return now.add(Duration(days: index));
   });
 
+  //List of 30 days for the horizontal calendar
+
+//Static Task List with differernt color
   final List<Map<String, dynamic>> tasks = [
     {
       'name': 'Sarah',
@@ -77,7 +82,8 @@ class _MainPageState extends State<MainPage> {
                           height: 10,
                         ),
                         Text(
-                          '${DateFormat('d, MMMM yyyy').format(days[selectedDayIndex])}',
+                          DateFormat('d, MMMM yyyy')
+                              .format(days[selectedDayIndex]),
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -168,13 +174,8 @@ class _MainPageState extends State<MainPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              TaskDetailPage(task: tasks[index]),
-                        ),
-                      );
+                      context
+                          .push('/taskdetail', extra: {'task': tasks[index]});
                     },
                     child: Task_Tile(
                       tile: tasks[index],
