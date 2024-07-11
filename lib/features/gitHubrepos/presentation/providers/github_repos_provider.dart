@@ -22,10 +22,12 @@ class GitHubRepo extends AsyncNotifier<List<GitHubRepoEntity>> {
       {required bool first, required int daysAgo}) async {
     if (isLoading) return;
     //first used to reset when user changes to past 30 days
-    isLoading = true;
-    first ? state = const AsyncValue.data([]) : null;
-    first ? state = const AsyncLoading() : null;
-    first ? ref.read(currentPageProvider.notifier).state = 1 : null;
+    isLoading = state.isLoading;
+    if (first) {
+      state = const AsyncValue.data([]);
+      state = const AsyncLoading();
+      ref.read(currentPageProvider.notifier).state = 1;
+    }
 
     try {
       final respository = ref.read(gitHubrespository);
@@ -43,7 +45,7 @@ class GitHubRepo extends AsyncNotifier<List<GitHubRepoEntity>> {
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } finally {
-      isLoading = false;
+      isLoading = state.isLoading;
       //after function exection making it false
     }
   }

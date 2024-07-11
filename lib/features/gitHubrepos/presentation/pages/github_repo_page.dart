@@ -1,5 +1,6 @@
 import 'package:assignmenr/features/gitHubrepos/presentation/widgets/github_repos_list.dart';
 import 'package:assignmenr/features/gitHubrepos/presentation/providers/github_repos_provider.dart';
+import 'package:assignmenr/utils/notifymessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,7 @@ class _GithubReposPageState extends ConsumerState<GithubReposPage> {
       //FAB to change the days Past 60 or 30 Days
       floatingActionButton: FloatingActionButton(
         onPressed: isLoading
-            ? null
+            ? () => NotifyUserMessage.notifyType(context, 'Loading')
             : () {
                 setState(() {
                   _daysAgo = _daysAgo == 30 ? 60 : 30;
